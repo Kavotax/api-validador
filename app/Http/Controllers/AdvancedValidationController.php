@@ -8,6 +8,16 @@ class AdvancedValidationController extends Controller
 {
     public function validateEmail(Request $request)
     {
+        try {
+            $request->validate([
+                'email' => 'required|email'
+            ]);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return response()->json([
+                'valid' => false,
+                'reason' => $e->validator->errors()->first('email')
+            ], 422);
+        }
         $request->validate([
             'email' => 'required|email'
         ]);
@@ -32,7 +42,7 @@ class AdvancedValidationController extends Controller
                 $connection = @fsockopen($mxHost, 25, $errno, $errstr, 5);
 
                 if ($connection) {
-                    $from = 'verificacion@mi-api.com'; // usa tu correo válido
+                    $from = 'kavotax@yandex.com';
                     $to = $email;
 
                     $this->getSmtpResponse($connection); // leer banner inicial
